@@ -152,7 +152,8 @@ class Checkout extends _$Checkout {
         regular_price: regularPrice,
         discount_type: 2,
         discount: user.special_discount,
-        discount_rate: (regularPrice * user.special_discount) / 100,
+        discount_rate:
+            ((regularPrice * user.special_discount) / 100) * e.quantity,
         total: discountPrice * e.quantity,
       );
     }).toList();
@@ -196,23 +197,23 @@ class Checkout extends _$Checkout {
       information: information,
     );
 
-    final result = await ref.read(checkoutRepoProvider).placeOrder(body);
-    return result.fold(
-      (l) {
-        showErrorToast(l.error.message);
-        state = AsyncError(l.error, StackTrace.current);
-        return false;
-      },
-      (r) {
-        ref.read(routerProvider).pop();
-        ref.read(cartProductProvider.notifier).clearCart();
-        state = const AsyncData(null);
-        showToast(r.message);
-        return r.success;
-      },
-    );
-    // Logger.d(body);
-    // return false;
+    // final result = await ref.read(checkoutRepoProvider).placeOrder(body);
+    // return result.fold(
+    //   (l) {
+    //     showErrorToast(l.error.message);
+    //     state = AsyncError(l.error, StackTrace.current);
+    //     return false;
+    //   },
+    //   (r) {
+    //     ref.read(routerProvider).pop();
+    //     ref.read(cartProductProvider.notifier).clearCart();
+    //     state = const AsyncData(null);
+    //     showToast(r.message);
+    //     return r.success;
+    //   },
+    // );
+    Logger.d(body);
+    return false;
   }
 }
 

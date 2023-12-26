@@ -35,6 +35,8 @@ class CheckoutScreen extends HookConsumerWidget {
 
     final appliedPromo = useState<PromoDataModel?>(null);
 
+//todo: fix this
+//todo: subtotal is wrong
     final subtotal = useMemoized<double>(() {
       if (state.isEmpty) {
         return 0.0;
@@ -190,7 +192,6 @@ class CheckoutScreen extends HookConsumerWidget {
                       name: name.value,
                       phone: phone.value,
                       information: address.value,
-                      
                     );
               },
               text: 'Place Order',
