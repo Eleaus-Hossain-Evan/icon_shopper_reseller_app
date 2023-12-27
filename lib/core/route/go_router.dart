@@ -10,6 +10,7 @@ import '../../features/auth/presentation/forgot_password/forgot_password_screen.
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/checkout/presentation/checkout_screen.dart';
+import '../../features/checkout/presentation/order_success_screen.dart';
 import '../../features/common/presentation/html_text_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/main_mav/main_nav.dart';
@@ -169,6 +170,13 @@ class RouterNotifier extends Listenable {
             child: OrderDetailScreen(
               model: state.extra as OrderModel,
             ),
+          ),
+        ),
+        GoRoute(
+          path: OrderSuccessScreen.route,
+          pageBuilder: (context, state) => SlideBottomToTopTransitionPage(
+            key: state.pageKey,
+            child: const OrderSuccessScreen(),
           ),
         ),
       ];

@@ -103,9 +103,9 @@ class KCachedNetworkImageWdLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isContainer = isBox
-        ? (borderWidth != null && borderColor != null && borderRadius != null)
-        : false;
+    var isContainer = !isBox
+        ? (borderWidth != null || borderColor != null || borderRadius != null)
+        : true;
     return Hero(
       tag: isHero ? ValueKey(imageUrl) : UniqueKey(),
       child: CachedNetworkImage(
@@ -129,7 +129,7 @@ class KCachedNetworkImageWdLoading extends StatelessWidget {
                     ),
                     image: DecorationImage(
                       image: imageProvider,
-                      fit: BoxFit.cover,
+                      fit: fit,
                     ),
                   ),
                   child: child,

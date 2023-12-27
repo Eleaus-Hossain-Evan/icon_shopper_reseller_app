@@ -112,7 +112,7 @@ class OrderDetailScreen extends HookConsumerWidget {
                                 width: 80.w,
                                 height: 80.w,
                                 fit: BoxFit.cover,
-                                borderRadius: BorderRadius.circular(10.r),
+                                borderRadius: BorderRadius.circular(6.r),
                               ),
                         title: item.product.product_name.text.bold.sm.make(),
                         subtitle:

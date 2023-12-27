@@ -131,16 +131,12 @@ class Checkout extends _$Checkout {
     final user = ref.watch(authProvider).user;
 
     final product = cart.map((e) {
-      final hasVariation = e.product.productVariationStatus ==
-          1; //' product has variation or not
+      final hasVariation = e.product.productVariationStatus == 1;
 
-      //' regular price, if product has variation then showing variant regular price,
-      //' otherwise showing product regular price
       final regularPrice = hasVariation
           ? e.product.selectedVariant.regularPrice
           : e.product.regularPrice;
 
-      //' discount price
       final discountPrice =
           (regularPrice - (regularPrice * user.special_discount) / 100).toInt();
       return SProduct(
@@ -158,8 +154,8 @@ class Checkout extends _$Checkout {
       );
     }).toList();
 
-    final total = cart
-        .map((e) => e.product.selectedVariant.salePrice * e.quantity)
+    final total = product
+        .map((e) => e.total)
         .toList()
         .reduce((value, element) => value + element)
         .toDouble();
@@ -197,23 +193,24 @@ class Checkout extends _$Checkout {
       information: information,
     );
 
-    // final result = await ref.read(checkoutRepoProvider).placeOrder(body);
-    // return result.fold(
-    //   (l) {
-    //     showErrorToast(l.error.message);
-    //     state = AsyncError(l.error, StackTrace.current);
-    //     return false;
-    //   },
-    //   (r) {
-    //     ref.read(routerProvider).pop();
-    //     ref.read(cartProductProvider.notifier).clearCart();
-    //     state = const AsyncData(null);
-    //     showToast(r.message);
-    //     return r.success;
-    //   },
-    // );
-    Logger.d(body);
-    return false;
+    final result = await ref.read(checkoutRepoProvider).placeOrder(body);
+    return result.fold(
+      (l) {
+        showErrorToast(l.error.message);
+        state = AsyncError(l.error, StackTrace.current);
+        return false;
+      },
+      (r) {
+        ref.read(routerProvider).pop();
+        ref.read(cartProductProvider.notifier).clearCart();
+        state = const AsyncData(null);
+        showToast(r.message);
+        return r.success;
+      },
+    );
+
+    // Logger.d(body);
+    // return true;
   }
 }
 

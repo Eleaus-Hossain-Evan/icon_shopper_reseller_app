@@ -17,29 +17,32 @@ class PriceTile extends HookConsumerWidget {
   final bool isPercentage;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: mainSpaceBetween,
-      children: [
-        Text(
-          title,
-          style: isTotal
-              ? const TextStyle(
-                  fontSize: AppSpacing.spaceUnit,
-                  fontWeight: FontWeight.w600,
-                )
-              : null,
-        ),
-        Text(
-          "${isPercentage ? "" : AppStrings.tkSymbol} $price ${isPercentage ? "%" : ""}",
-          style: isTotal
-              ? const TextStyle(
-                  fontSize: AppSpacing.spaceUnit,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
-                )
-              : null,
-        ),
-      ],
+    return Visibility(
+      visible: price > 0,
+      child: Row(
+        mainAxisAlignment: mainSpaceBetween,
+        children: [
+          Text(
+            title,
+            style: isTotal
+                ? const TextStyle(
+                    fontSize: AppSpacing.spaceUnit,
+                    fontWeight: FontWeight.w600,
+                  )
+                : null,
+          ),
+          Text(
+            "${isPercentage ? "" : AppStrings.tkSymbol} $price ${isPercentage ? "%" : ""}",
+            style: isTotal
+                ? const TextStyle(
+                    fontSize: AppSpacing.spaceUnit,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primary,
+                  )
+                : null,
+          ),
+        ],
+      ),
     );
   }
 }

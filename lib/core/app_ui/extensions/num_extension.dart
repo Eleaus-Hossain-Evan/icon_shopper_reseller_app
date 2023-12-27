@@ -14,6 +14,19 @@ extension PaddingExt on num {
       EdgeInsetsDirectional.only(top: toDouble());
   EdgeInsetsGeometry get paddingBottom =>
       EdgeInsetsDirectional.only(bottom: toDouble());
+
+  BorderRadiusGeometry get borderRadius =>
+      BorderRadiusDirectional.circular(toDouble());
+  BorderRadiusGeometry get borderRadiusHorizontal =>
+      BorderRadiusDirectional.horizontal(
+        end: Radius.circular(toDouble()),
+        start: Radius.circular(toDouble()),
+      );
+  BorderRadiusGeometry get borderRadiusVertical =>
+      BorderRadiusDirectional.vertical(
+        bottom: Radius.circular(toDouble()),
+        top: Radius.circular(toDouble()),
+      );
 }
 
 extension PaddingTupleExt on (num, num) {
@@ -29,6 +42,13 @@ extension PaddingQuadTupleExt on (num, num, num, num) {
         $2.toDouble(),
         $3.toDouble(),
         $4.toDouble(),
+      );
+
+  BorderRadiusGeometry get borderRadius => BorderRadiusDirectional.only(
+        topStart: Radius.circular($1.toDouble()),
+        topEnd: Radius.circular($2.toDouble()),
+        bottomEnd: Radius.circular($3.toDouble()),
+        bottomStart: Radius.circular($4.toDouble()),
       );
 }
 

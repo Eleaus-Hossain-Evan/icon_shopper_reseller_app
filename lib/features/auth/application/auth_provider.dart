@@ -44,14 +44,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     showToast('${state.user.name} logging out');
 
     ref.read(loggedInProvider.notifier).deleteAuthCache();
-    NetworkHandler.instance.setToken("");
     // ref.read(routerProvider).go(LoginScreen.route);
 
     // ref.read(loggedInProvider.notifier).isLoggedIn();
     state = state.copyWith(user: UserModel.init());
+    NetworkHandler.instance.setToken("");
   }
 
   Future<bool> register(SignUpBody body) async {

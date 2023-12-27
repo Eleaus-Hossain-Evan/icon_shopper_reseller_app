@@ -11,6 +11,7 @@ import '../../../features/checkout/application/checkout_provider.dart';
 import '../../../features/profile/presentation/profile_screen.dart';
 import '../auth/application/auth_provider.dart';
 import '../checkout/presentation/cart_screen.dart';
+import '../home/application/home_provider.dart';
 import '../home/presentation/home_screen.dart';
 import '../profile/application/profile_provider.dart';
 
@@ -33,7 +34,7 @@ class MainNav extends HookConsumerWidget {
 
     useEffect(() {
       Future.wait([
-        // Future.microtask(() => ref.read(homeDataProvider.notifier).getData()),
+        Future.microtask(() => ref.read(homeDataProvider)),
         Future.microtask(() => ref.read(authProvider.notifier).profileView()),
         Future.microtask(() =>
             ref.read(contactInfoNotifierProvider.notifier).getContactInfo()),

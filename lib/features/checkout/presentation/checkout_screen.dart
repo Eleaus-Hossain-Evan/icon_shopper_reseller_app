@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -10,6 +11,7 @@ import '../../../features/checkout/presentation/widgets/customer_info_section.da
 import '../../profile/presentation/widgets/contact_info_widget.dart';
 import '../application/checkout_provider.dart';
 import '../domain/delivery_charge_response.dart';
+import 'order_success_screen.dart';
 import 'widgets/area_section.dart';
 import 'widgets/cart_product_tile.dart';
 import 'widgets/coupon_section.dart';
@@ -36,25 +38,34 @@ class CheckoutScreen extends HookConsumerWidget {
     final appliedPromo = useState<PromoDataModel?>(null);
 
 //todo: fix this
-//todo: subtotal is wrong
+//todo: subtotal is wrong, recalculate regular price and user spacial discount
     final subtotal = useMemoized<double>(() {
-      if (state.isEmpty) {
-        return 0.0;
-      }
-      final value = state
-          .map((element) =>
-              element.product.selectedVariant.salePrice * element.quantity)
-          .toList();
-      return value.reduce((value, element) => value + element).toDouble();
+      return state
+          .map((e) {
+            final hasVariation = e.product.productVariationStatus == 1;
+
+            final regularPrice = hasVariation
+                ? e.product.selectedVariant.regularPrice
+                : e.product.regularPrice;
+
+            final discountPrice = (regularPrice -
+                    (regularPrice *
+                            ref.watch(authProvider).user.special_discount) /
+                        100)
+                .toInt();
+            return discountPrice * e.quantity;
+          })
+          .reduce((value, element) => value + element)
+          .toDouble();
     }, [state]);
 
-    final discount = useMemoized(
-        () => auth.user.special_discount + (appliedPromo.value?.value ?? 0.0),
-        [appliedPromo.value]);
+    final discount = useMemoized(() => auth.user.special_discount, []);
 
     final total = useMemoized(
-        () => (subtotal + (selectedShipping.value?.value ?? 0)) - discount,
-        [subtotal, discount, selectedShipping.value?.value]);
+        () => (subtotal +
+            (selectedShipping.value?.value ?? 0) -
+            (appliedPromo.value?.value ?? 0)),
+        [subtotal, appliedPromo.value?.value, selectedShipping.value?.value]);
 
     return Scaffold(
       backgroundColor: AppColors.bg200,
@@ -111,6 +122,11 @@ class CheckoutScreen extends HookConsumerWidget {
                     title: AppStrings.discount,
                     price: discount,
                     isPercentage: true,
+                  ),
+                  PriceTile(
+                    title: AppStrings.couponDiscount,
+                    price: (appliedPromo.value?.value ?? 0),
+                    isPercentage: appliedPromo.value?.type == 1,
                   ),
                   PriceTile(
                     title: AppStrings.deliveryCharge,
@@ -184,7 +200,9 @@ class CheckoutScreen extends HookConsumerWidget {
                   showErrorToast('Please enter your address');
                   return;
                 }
-                ref.read(checkoutProvider.notifier).placeOrder(
+                ref
+                    .read(checkoutProvider.notifier)
+                    .placeOrder(
                       cart: state,
                       coupon: appliedPromo.value,
                       shippingCost:
@@ -192,7 +210,10 @@ class CheckoutScreen extends HookConsumerWidget {
                       name: name.value,
                       phone: phone.value,
                       information: address.value,
-                    );
+                    )
+                    .then((value) {
+                  if (value) context.pushReplacement(OrderSuccessScreen.route);
+                });
               },
               text: 'Place Order',
             ).px32(),

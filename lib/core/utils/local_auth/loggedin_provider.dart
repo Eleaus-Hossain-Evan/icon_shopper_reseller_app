@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easylogger/flutter_logger.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../features/auth/domain/model/user_model.dart';
@@ -12,30 +11,21 @@ final loggedInProvider = ChangeNotifierProvider((ref) {
 class LoggedInNotifier extends ChangeNotifier {
   final Ref ref;
 
-  String _token = '';
+  final String _token = '';
 
-  String get token => _token;
+  String get token =>
+      ref.watch(hiveProvider).get(AppStrings.token, defaultValue: '');
 
   UserModel get user => getUser();
 
   bool get loggedIn => token.isEmpty && user == UserModel.init() ? false : true;
 
-  LoggedInNotifier(this.ref) {
-    ref
-        .watch(hiveProvider)
-        .getCacheBox()
-        .watch(key: AppStrings.token)
-        .listen((event) {
-      Logger.d('token: ${event.value}');
-      if (event.key == AppStrings.token && !event.deleted) {
-        _token = event.value ?? '';
-      }
-    });
-  }
+  LoggedInNotifier(this.ref);
 
   void deleteAuthCache() {
     ref.read(hiveProvider).delete(AppStrings.token);
     ref.read(hiveProvider).delete(AppStrings.user);
+
     notifyListeners();
   }
 

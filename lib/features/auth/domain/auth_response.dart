@@ -65,9 +65,11 @@ class AuthResponse extends Equatable {
       access_token: map['access_token'],
       token_type: map['token_type'],
       expires_in: map['expires_in']?.toInt(),
-      user: map['user'] != null
+      user: map['user'] != null && map['data'] == null
           ? UserModel.fromMap(map['user'])
-          : UserModel.fromMap(map['data']),
+          : map['user'] == null && map['data'] != null
+              ? UserModel.fromMap(map['data'])
+              : UserModel.init(),
     );
   }
 

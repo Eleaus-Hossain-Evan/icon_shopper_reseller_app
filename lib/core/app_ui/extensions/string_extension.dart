@@ -169,6 +169,6 @@ extension StringWidgetsExtension on String {
         width: width,
         isHero: isHero,
         isBox: isBox,
-        borderRadius: borderRadius ?? BorderRadius.zero,
+        borderRadius: borderRadius,
       );
 }

@@ -94,6 +94,8 @@ class AppStrings {
 
   static var discount = "Discount";
 
+  static var couponDiscount = "Coupon Discount";
+
   static var deliveryCharge = "Delivery Charge";
 
   static var total = "Total";

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:icon_shopper_reseller_app/core/app_ui/app_ui.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 kShowBottomSheet({
   required BuildContext context,
@@ -17,24 +16,17 @@ kShowBottomSheet({
 kShowFloatBottomSheet({
   required BuildContext context,
   required Widget child,
-}) =>
-    showMaterialModalBottomSheet(
+}) async {
+  final result = await showCustomModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-      ),
-      elevation: 0,
-      builder: (context) => Container(
-        // height: height,
-        margin: EdgeInsets.all(20.w),
-        decoration: BoxDecoration(
-          color: context.theme.scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(12.r),
-        ),
-        child: child,
-      ),
-    );
+      builder: (context) => child,
+      containerWidget: (_, animation, child) => FloatingModal(
+            child: child,
+          ),
+      expand: false);
+
+  return result;
+}
 
 kShowBarModalBottomSheet({
   required BuildContext context,
@@ -74,4 +66,27 @@ Future<T?> showAppModal<T>({
     elevation: elevation,
     backgroundColor: backgroundColor,
   );
+}
+
+class FloatingModal extends StatelessWidget {
+  final Widget child;
+  final Color? backgroundColor;
+
+  const FloatingModal({Key? key, required this.child, this.backgroundColor})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: 20.padding,
+        child: Material(
+          color: backgroundColor,
+          clipBehavior: Clip.antiAlias,
+          borderRadius: 12.borderRadius,
+          child: child,
+        ),
+      ),
+    );
+  }
 }
