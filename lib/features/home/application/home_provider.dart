@@ -33,7 +33,7 @@ final homeDataProvider = FutureProvider<HomeResponse>((ref) async {
     showErrorToast(l.error.message);
     return HomeResponse.init();
   }, (r) => r);
-});
+}, name: 'homeDataProvider');
 
 class HomeDataNotifier extends AsyncNotifier<HomeResponse> {
   @override

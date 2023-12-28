@@ -173,10 +173,16 @@ class RouterNotifier extends Listenable {
           ),
         ),
         GoRoute(
-          path: OrderSuccessScreen.route,
+          path: '${OrderSuccessScreen.route}/:invoiceId',
           pageBuilder: (context, state) => SlideBottomToTopTransitionPage(
             key: state.pageKey,
-            child: const OrderSuccessScreen(),
+            child: OrderSuccessScreen(
+              invoiceId: state.pathParameters['invoiceId'] ?? '',
+              paymentMethod: PaymentMethod.values
+                  .byName(state.uri.queryParameters['method'] ?? ''),
+              totalPrice: state.uri.queryParameters['totalPrice'] ?? '',
+              address: state.uri.queryParameters['address'] ?? '',
+            ),
           ),
         ),
       ];

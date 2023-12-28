@@ -15,47 +15,91 @@ class HomeLatestProductWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final value =
-        ref.watch(homeDataProvider).whenData((value) => value.newArrival);
+    final state = ref.watch(homeDataProvider);
+    final value = state.whenData((value) => value.newArrival);
     return Column(
       children: [
         Gap(42.h),
         "Latest Products".text.xl4.wide.makeCentered(),
         Gap(15.h),
-        (!value.isLoading && (value.valueOrNull?.data.isEmpty ?? true))
-            ? "No Product Found"
-                .text.xl
-                .bold
-                .letterSpacing(1.2)
-                .makeCentered()
-                .p32()
-                .color(AppColors.bg300)
-            : GridView.builder(
-                padding: paddingH20,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20.w,
-                  mainAxisSpacing: 18.w,
-                  childAspectRatio: 180 / 335,
-                ),
-                itemCount: value.valueOrNull?.data.length ?? 4,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  final item = ref
-                      .watch(homeDataProvider)
-                      .whenData((value) => value.newArrival.data[index]);
 
-                  return item.when(
-                    data: (data) => ProductGridTile(data: data),
-                    error: (error, stackTrace) {
-                      log(error.toString(), stackTrace: stackTrace);
-                      return Text(error.toString());
-                    },
-                    loading: () => const ProductGridShimmer(),
-                  );
-                },
-              ),
+        state.when(
+          data: (value) => value.newArrival.data.isEmpty
+              ? "No Product Found"
+                  .text
+                  .xl
+                  .bold
+                  .letterSpacing(1.2)
+                  .makeCentered()
+                  .p32()
+                  .color(AppColors.bg300)
+              : GridView.builder(
+                  padding: paddingH20,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 20.w,
+                    mainAxisSpacing: 18.w,
+                    childAspectRatio: 180 / 335,
+                  ),
+                  itemCount: value.newArrival.data.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    final item = ref
+                        .watch(homeDataProvider)
+                        .whenData((value) => value.newArrival.data[index]);
+
+                    return item.when(
+                      data: (data) => ProductGridTile(data: data),
+                      error: (error, stackTrace) {
+                        log(error.toString(), stackTrace: stackTrace);
+                        return Text(error.toString());
+                      },
+                      loading: () => const ProductGridShimmer(),
+                    );
+                  },
+                ),
+          error: (error, stackTrace) {
+            log(error.toString(), stackTrace: stackTrace);
+            return Text(error.toString());
+          },
+          loading: () => const ProductGridShimmer(),
+        ),
+        // (!state.isLoading && (value.valueOrNull?.data.isEmpty ?? true))
+        //     ? "No Product Found"
+        //         .text
+        //         .xl
+        //         .bold
+        //         .letterSpacing(1.2)
+        //         .makeCentered()
+        //         .p32()
+        //         .color(AppColors.bg300)
+        //     : GridView.builder(
+        //         padding: paddingH20,
+        //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        //           crossAxisCount: 2,
+        //           crossAxisSpacing: 20.w,
+        //           mainAxisSpacing: 18.w,
+        //           childAspectRatio: 180 / 335,
+        //         ),
+        //         itemCount: value.valueOrNull?.data.length ?? 4,
+        //         shrinkWrap: true,
+        //         physics: const NeverScrollableScrollPhysics(),
+        //         itemBuilder: (BuildContext context, int index) {
+        //           final item = ref
+        //               .watch(homeDataProvider)
+        //               .whenData((value) => value.newArrival.data[index]);
+
+        //           return item.when(
+        //             data: (data) => ProductGridTile(data: data),
+        //             error: (error, stackTrace) {
+        //               log(error.toString(), stackTrace: stackTrace);
+        //               return Text(error.toString());
+        //             },
+        //             loading: () => const ProductGridShimmer(),
+        //           );
+        //         },
+        //       ),
         gap20,
         "View All Product"
             .text

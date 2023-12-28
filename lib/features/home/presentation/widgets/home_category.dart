@@ -15,6 +15,7 @@ class HomeCategoryWidget extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    final state = ref.watch(homeDataProvider);
     return Padding(
       padding: paddingH20,
       child: GridView.builder(
@@ -27,8 +28,7 @@ class HomeCategoryWidget extends HookConsumerWidget {
           childAspectRatio: 1.4,
         ),
         itemBuilder: (context, index) {
-          final item = ref
-              .watch(homeDataProvider)
+          final item = state
               .whenData((value) => value.categories.first.subCategories[index]);
           return item.when(
             data: (data) => KInkWell(

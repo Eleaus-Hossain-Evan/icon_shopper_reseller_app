@@ -118,7 +118,7 @@ class Checkout extends _$Checkout {
             }));
   }
 
-  Future<bool> placeOrder({
+  Future<(bool, String)> placeOrder({
     PromoDataModel? coupon,
     required double shippingCost,
     required String name,
@@ -129,6 +129,7 @@ class Checkout extends _$Checkout {
     state = const AsyncLoading();
 
     final user = ref.watch(authProvider).user;
+    final invoiceId = "ECOM-${RndX.guid(length: 6)}";
 
     final product = cart.map((e) {
       final hasVariation = e.product.productVariationStatus == 1;
@@ -169,7 +170,7 @@ class Checkout extends _$Checkout {
               ? coupon?.value
               : ((total * (coupon?.value ?? 0)) / 100)
           : null,
-      invoice_no: "ECOM-${RndX.guid(length: 6)}",
+      invoice_no: invoiceId,
       item: cart.length,
       total_qty: cart
           .map((element) => element.quantity)
@@ -198,14 +199,14 @@ class Checkout extends _$Checkout {
       (l) {
         showErrorToast(l.error.message);
         state = AsyncError(l.error, StackTrace.current);
-        return false;
+        return (false, '');
       },
       (r) {
         ref.read(routerProvider).pop();
         ref.read(cartProductProvider.notifier).clearCart();
         state = const AsyncData(null);
         showToast(r.message);
-        return r.success;
+        return (r.success, invoiceId);
       },
     );
 

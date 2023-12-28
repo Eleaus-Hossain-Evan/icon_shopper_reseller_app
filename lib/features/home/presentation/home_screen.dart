@@ -5,7 +5,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../core/core.dart';
-import '../../../features/home/presentation/widgets/home_category.dart';
 import '../../../features/home/presentation/widgets/home_slider.dart';
 import '../application/home_provider.dart';
 import 'widgets/home_latest_product.dart';
@@ -45,7 +44,7 @@ class HomeScreen extends HookConsumerWidget {
             children: [
               const HomeSlider(),
               gap36,
-              const HomeCategoryWidget(),
+              // const HomeCategoryWidget(),
               gap36,
               const HomeLatestProductWidget(),
               Images.home.assetImage(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easylogger/flutter_logger.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -40,6 +41,9 @@ class CheckoutScreen extends HookConsumerWidget {
 //todo: fix this
 //todo: subtotal is wrong, recalculate regular price and user spacial discount
     final subtotal = useMemoized<double>(() {
+      if (state.isEmpty) {
+        return 0.0;
+      }
       return state
           .map((e) {
             final hasVariation = e.product.productVariationStatus == 1;
@@ -200,20 +204,27 @@ class CheckoutScreen extends HookConsumerWidget {
                   showErrorToast('Please enter your address');
                   return;
                 }
-                ref
-                    .read(checkoutProvider.notifier)
-                    .placeOrder(
-                      cart: state,
-                      coupon: appliedPromo.value,
-                      shippingCost:
-                          (selectedShipping.value?.value ?? 0).toDouble(),
-                      name: name.value,
-                      phone: phone.value,
-                      information: address.value,
-                    )
-                    .then((value) {
-                  if (value) context.pushReplacement(OrderSuccessScreen.route);
-                });
+                // ref
+                //     .read(checkoutProvider.notifier)
+                //     .placeOrder(
+                //       cart: state,
+                //       coupon: appliedPromo.value,
+                //       shippingCost:
+                //           (selectedShipping.value?.value ?? 0).toDouble(),
+                //       name: name.value,
+                //       phone: phone.value,
+                //       information: address.value,
+                //     )
+                //     .then((value) {
+                //   final (isSuccess, invoiceId) = value;
+                //   if (isSuccess) {
+                //     context.pushReplacement(
+                //         '${OrderSuccessScreen.route}/$invoiceId?method=${selectedPayment.value.name}&&totalPrice=$total&&address=${address.value}');
+                //   }
+                // });
+                Logger.i(GoRouter.of(context).routerDelegate);
+                context.pushReplacement(
+                    '${OrderSuccessScreen.route}/123?method=${selectedPayment.value.name}&&totalPrice=$total&&address=${address.value}');
               },
               text: 'Place Order',
             ).px32(),
