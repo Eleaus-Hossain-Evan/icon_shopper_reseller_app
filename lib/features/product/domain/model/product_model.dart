@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
+import 'package:icon_shopper_reseller_app/features/product/domain/model/stock_products_model.dart';
 
 import 'brand_model.dart';
 import 'color_list.dart';
@@ -66,6 +67,7 @@ class ProductModel extends Equatable {
   final List<ProductVariantModel>? productVariants;
   final ProductVariantModel selectedVariant;
   final String slug;
+  final List<StockProductsModel> stockProducts;
 
   const ProductModel({
     required this.id,
@@ -127,6 +129,7 @@ class ProductModel extends Equatable {
     required this.productVariants,
     required this.selectedVariant,
     required this.slug,
+    required this.stockProducts,
   });
 
   factory ProductModel.init() => ProductModel(
@@ -189,6 +192,7 @@ class ProductModel extends Equatable {
         productVariants: const [],
         selectedVariant: ProductVariantModel.init(),
         slug: '',
+        stockProducts: const [],
       );
 
   ProductModel copyWith({
@@ -251,6 +255,7 @@ class ProductModel extends Equatable {
     List<ProductVariantModel>? productVariants,
     ProductVariantModel? selectedVariant,
     String? slug,
+    List<StockProductsModel>? stockProducts,
   }) {
     return ProductModel(
       id: id ?? this.id,
@@ -314,6 +319,7 @@ class ProductModel extends Equatable {
       productVariants: productVariants ?? this.productVariants,
       selectedVariant: selectedVariant ?? this.selectedVariant,
       slug: slug ?? this.slug,
+      stockProducts: stockProducts ?? this.stockProducts,
     );
   }
 
@@ -378,6 +384,7 @@ class ProductModel extends Equatable {
       'productVariants': productVariants?.map((x) => x.toMap()).toList(),
       'selectedVariant': selectedVariant.toMap(),
       'slug': slug,
+      'stockProducts': stockProducts..map((x) => x.toMap()).toList(),
     };
   }
 
@@ -451,6 +458,9 @@ class ProductModel extends Equatable {
               const []),
       selectedVariant: ProductVariantModel.init(),
       slug: map['slug'] ?? '',
+      stockProducts: List<StockProductsModel>.from(
+          map['stock_products']?.map((x) => StockProductsModel.fromMap(x)) ??
+              const []),
     );
   }
 

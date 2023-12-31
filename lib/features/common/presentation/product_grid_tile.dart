@@ -55,6 +55,21 @@ class ProductGridTile extends HookConsumerWidget {
                     ),
                   ),
                 ),
+                Visibility(
+                  visible: data.stockProducts.first.total <= 0,
+                  child: Center(
+                    child: "Out of Stock"
+                        .text
+                        .lg
+                        .bold
+                        .white
+                        .make()
+                        .pSymmetric(h: 8, v: 4)
+                        .box
+                        .color(AppColors.black.withOpacity(.3))
+                        .make(),
+                  ),
+                ),
                 Positioned(
                   top: 8.h,
                   left: 8.w,

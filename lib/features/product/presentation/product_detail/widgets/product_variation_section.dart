@@ -31,13 +31,33 @@ class ProductVariationSection extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: crossStart,
         children: [
-          "$attrib1stName :".text.xl.make(),
-          gap8,
-          ProductVariantList(
-            currentVariant: variant,
-            onTap: (item) => ref
-                .read(productVariantProvider.notifier)
-                .update((state) => item),
+          Visibility(
+            visible: state.stockProducts.first.total <= 0,
+            replacement: Column(
+              crossAxisAlignment: crossStart,
+              children: [
+                "$attrib1stName :".text.xl.make(),
+                gap8,
+                ProductVariantList(
+                  currentVariant: variant,
+                  onTap: (item) => ref
+                      .read(productVariantProvider.notifier)
+                      .update((state) => item),
+                ),
+              ],
+            ),
+            child: Center(
+              child: "Out of Stock"
+                  .text
+                  .lg
+                  .bold
+                  .white
+                  .make()
+                  .pSymmetric(h: 8, v: 4)
+                  .box
+                  .color(AppColors.black.withOpacity(.3))
+                  .make(),
+            ),
           ),
           gap24,
           "Product color may slightly vary, depending on your devices screen resolution"
