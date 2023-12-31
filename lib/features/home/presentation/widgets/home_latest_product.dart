@@ -23,8 +23,8 @@ class HomeLatestProductWidget extends HookConsumerWidget {
         "Latest Products".text.xl4.wide.makeCentered(),
         Gap(15.h),
 
-        state.when(
-          data: (value) => value.newArrival.data.isEmpty
+        value.when(
+          data: (value) => value.data.isEmpty
               ? "No Product Found"
                   .text
                   .xl
@@ -41,29 +41,32 @@ class HomeLatestProductWidget extends HookConsumerWidget {
                     mainAxisSpacing: 18.w,
                     childAspectRatio: 180 / 335,
                   ),
-                  itemCount: value.newArrival.data.length,
+                  itemCount: value.data.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    final item = ref
-                        .watch(homeDataProvider)
-                        .whenData((value) => value.newArrival.data[index]);
-
-                    return item.when(
-                      data: (data) => ProductGridTile(data: data),
-                      error: (error, stackTrace) {
-                        log(error.toString(), stackTrace: stackTrace);
-                        return Text(error.toString());
-                      },
-                      loading: () => const ProductGridShimmer(),
-                    );
+                    final item = value.data[index];
+                    return ProductGridTile(data: item);
                   },
                 ),
           error: (error, stackTrace) {
             log(error.toString(), stackTrace: stackTrace);
             return Text(error.toString());
           },
-          loading: () => const ProductGridShimmer(),
+          loading: () => GridView.builder(
+            padding: paddingH20,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 20.w,
+              mainAxisSpacing: 18.w,
+              childAspectRatio: 180 / 335,
+            ),
+            itemCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (BuildContext context, int index) =>
+                const ProductGridShimmer(),
+          ),
         ),
         // (!state.isLoading && (value.valueOrNull?.data.isEmpty ?? true))
         //     ? "No Product Found"

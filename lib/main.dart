@@ -6,6 +6,7 @@ import 'package:flutter_easylogger/flutter_logger.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:icon_shopper_reseller_app/features/auth/domain/model/user_model.dart';
 
 import 'core/core.dart';
 import 'features/auth/application/auth_provider.dart';
@@ -39,10 +40,16 @@ Future<void> main() async {
   container.read(themeProvider);
 
   final String token = box.get(AppStrings.token, defaultValue: '');
+  final String user =
+      box.get(AppStrings.user, defaultValue: UserModel.init().toJson());
 
   NetworkHandler.instance
     ..setup(baseUrl: APIRouteEndpoint.BASE_URL, showLogs: false)
     ..setToken(token);
+
+  container.read(loggedInProvider.notifier)
+    ..setToken(token)
+    ..setUser(UserModel.fromJson(user));
 
   Logger.d('token: $token');
   runApp(

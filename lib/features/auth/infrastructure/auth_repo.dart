@@ -1,8 +1,8 @@
 import '../../../core/core.dart';
-import '../../../features/auth/domain/auth_response.dart';
-import '../../../features/auth/domain/signup_body.dart';
-import '../../../features/common/domain/simple_response.dart';
-import '../../../features/profile/domain/change_password_body.dart';
+import '../domain/auth_response.dart';
+import '../domain/signup_body.dart';
+import '../../common/domain/simple_response.dart';
+import '../../profile/domain/change_password_body.dart';
 import '../../profile/domain/profile_update_body.dart';
 
 class AuthRepo {

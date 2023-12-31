@@ -8,7 +8,7 @@ import 'package:mime/mime.dart';
 import '../../../core/core.dart';
 import '../../../features/auth/application/auth_state.dart';
 import '../../../features/auth/domain/signup_body.dart';
-import '../../../features/auth/infastructure/auth_repo.dart';
+import '../../../features/auth/infrastructure/auth_repo.dart';
 import '../../profile/domain/change_password_body.dart';
 import '../../profile/domain/profile_update_body.dart';
 import '../domain/model/user_model.dart';

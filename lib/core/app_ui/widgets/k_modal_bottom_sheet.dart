@@ -1,6 +1,9 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:icon_shopper_reseller_app/core/app_ui/app_ui.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 kShowBottomSheet({
   required BuildContext context,
@@ -13,13 +16,15 @@ kShowBottomSheet({
   );
 }
 
-kShowFloatBottomSheet({
+Future<T?> kShowFloatBottomSheet<T>({
   required BuildContext context,
   required Widget child,
 }) async {
   final result = await showCustomModalBottomSheet(
       context: context,
       builder: (context) => child,
+      useRootNavigator: true,
+      duration: 300.milliseconds,
       containerWidget: (_, animation, child) => FloatingModal(
             child: child,
           ),
@@ -41,7 +46,7 @@ kShowBarModalBottomSheet({
 }
 
 /// Modal which is styled for the Flutter News Example app.
-Future<T?> showAppModal<T>({
+showAppModal<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   RouteSettings? routeSettings,
@@ -52,21 +57,20 @@ Future<T?> showAppModal<T>({
   bool isDismissible = true,
   bool enableDrag = true,
   AnimationController? transitionAnimationController,
-}) {
-  return showModalBottomSheet(
-    context: context,
-    builder: builder,
-    routeSettings: routeSettings,
-    constraints: constraints,
-    isScrollControlled: true,
-    barrierColor: barrierColor,
-    isDismissible: isDismissible,
-    enableDrag: enableDrag,
-    transitionAnimationController: transitionAnimationController,
-    elevation: elevation,
-    backgroundColor: backgroundColor,
-  );
-}
+}) =>
+    showModalBottomSheet<T>(
+      context: context,
+      builder: builder,
+      routeSettings: routeSettings,
+      constraints: constraints,
+      isScrollControlled: true,
+      barrierColor: barrierColor,
+      isDismissible: isDismissible,
+      enableDrag: enableDrag,
+      transitionAnimationController: transitionAnimationController,
+      elevation: elevation,
+      backgroundColor: backgroundColor,
+    );
 
 class FloatingModal extends StatelessWidget {
   final Widget child;

@@ -6,56 +6,49 @@ import '../../core.dart';
 
 final loggedInProvider = ChangeNotifierProvider((ref) {
   return LoggedInNotifier(ref);
-});
+}, name: "loggedInProvider");
 
 class LoggedInNotifier extends ChangeNotifier {
+  LoggedInNotifier(this.ref);
   final Ref ref;
 
-  final String _token = '';
+  String _token = '';
+  UserModel _user = UserModel.init();
 
-  String get token =>
-      ref.watch(hiveProvider).get(AppStrings.token, defaultValue: '');
+  String get token => _token;
+  UserModel get user => _user;
 
-  UserModel get user => getUser();
-
-  bool get loggedIn => token.isEmpty && user == UserModel.init() ? false : true;
-
-  LoggedInNotifier(this.ref);
+  bool get loggedIn => _token.isNotEmpty;
 
   void deleteAuthCache() {
     ref.read(hiveProvider).delete(AppStrings.token);
     ref.read(hiveProvider).delete(AppStrings.user);
 
-    notifyListeners();
+    updateAuthCache();
   }
 
   void updateAuthCache({String? token, UserModel? user}) {
     changeToken(token ?? "");
     changeSavedUser(user ?? UserModel.init());
-    notifyListeners();
   }
 
   void changeToken(String token) {
     ref.read(hiveProvider).put(AppStrings.token, token);
-    notifyListeners();
+    setToken(token);
   }
 
   void changeSavedUser(UserModel user) {
     ref.read(hiveProvider).put(AppStrings.user, user.toJson());
+    setUser(user);
+  }
+
+  void setToken(String token) {
+    _token = token;
     notifyListeners();
   }
 
-  // String getToken() {
-  //   final boxStream =
-  //       ref.watch(hiveProvider).getCacheBox().watch(key: AppStrings.token);
-  //   String data = boxStream.listen((event) {
-  //     return event.value;
-  //   }).toString();
-  // }
-
-  UserModel getUser() {
-    return UserModel.fromJson(ref
-        .watch(hiveProvider)
-        .get(AppStrings.user, defaultValue: UserModel.init().toJson()));
+  void setUser(UserModel user) {
+    _user = user;
+    notifyListeners();
   }
 }

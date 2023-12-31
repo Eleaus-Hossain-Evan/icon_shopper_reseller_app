@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easylogger/flutter_logger.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -25,6 +26,7 @@ class MainNav extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cartState = ref.watch(cartProductProvider);
     final navIndex = useState(0);
+    final canPop = useState(false);
     final navWidget = [
       const HomeScreen(),
       const CategoryScreen(),
@@ -45,70 +47,123 @@ class MainNav extends HookConsumerWidget {
       return () => Logger.i("app exit");
     }, const []);
 
-    return Scaffold(
-      body: navWidget[navIndex.value],
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: AppColors.bg200,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        key: bottomNavigatorKey,
-        selectedIndex: navIndex.value,
-        onDestinationSelected: (index) {
-          navIndex.value = index;
-        },
-        animationDuration: 600.milliseconds,
-        destinations: [
-          NavigationDestination(
-            icon: const Icon(
-              Icons.home_outlined,
-              color: AppColors.black600,
-            ),
-            selectedIcon: Icon(
-              Icons.home,
-              color: context.colors.primary,
-            ),
-            label: AppStrings.home,
-          ),
-          NavigationDestination(
-            icon: const Icon(
-              BoxIcons.bx_category,
-              color: AppColors.black600,
-            ),
-            selectedIcon: Icon(
-              BoxIcons.bxs_category,
-              color: context.colors.primary,
-            ),
-            label: "Category",
-          ),
-          NavigationDestination(
-            icon: Badge(
-              backgroundColor: context.colors.secondary,
-              label: Text(cartState.length.toString()),
-              isLabelVisible: cartState.isNotEmpty,
-              child: const Icon(
-                BoxIcons.bx_cart_alt,
+    return PopScope(
+      canPop: canPop.value,
+      onPopInvoked: (didPop) async {
+        if (navIndex.value == 0) {
+          showBackDialog(context, (didPop) {
+            canPop.value = didPop;
+            SystemNavigator.pop();
+          });
+        } else {
+          (bottomNavigatorKey.currentWidget as BottomNavigationBar).onTap!(0);
+        }
+
+        // if (didPop) {
+        //   return;
+        // }
+      },
+      child: Scaffold(
+        body: navWidget[navIndex.value],
+        bottomNavigationBar: NavigationBar(
+          backgroundColor: AppColors.bg200,
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          key: bottomNavigatorKey,
+          selectedIndex: navIndex.value,
+          onDestinationSelected: (index) {
+            navIndex.value = index;
+          },
+          animationDuration: 600.milliseconds,
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(
+                Icons.home_outlined,
                 color: AppColors.black600,
               ),
+              selectedIcon: Icon(
+                Icons.home,
+                color: context.colors.primary,
+              ),
+              label: AppStrings.home,
             ),
-            selectedIcon: Icon(
-              BoxIcons.bxs_cart_alt,
-              color: context.colors.primary,
+            NavigationDestination(
+              icon: const Icon(
+                BoxIcons.bx_category,
+                color: AppColors.black600,
+              ),
+              selectedIcon: Icon(
+                BoxIcons.bxs_category,
+                color: context.colors.primary,
+              ),
+              label: "Category",
             ),
-            label: "Cart",
-          ),
-          NavigationDestination(
-            icon: const Icon(
-              BoxIcons.bx_user,
-              color: AppColors.black600,
+            NavigationDestination(
+              icon: Badge(
+                backgroundColor: context.colors.secondary,
+                label: Text(cartState.length.toString()),
+                isLabelVisible: cartState.isNotEmpty,
+                child: const Icon(
+                  BoxIcons.bx_cart_alt,
+                  color: AppColors.black600,
+                ),
+              ),
+              selectedIcon: Icon(
+                BoxIcons.bxs_cart_alt,
+                color: context.colors.primary,
+              ),
+              label: "Cart",
             ),
-            selectedIcon: Icon(
-              BoxIcons.bxs_user,
-              color: context.colors.primary,
+            NavigationDestination(
+              icon: const Icon(
+                BoxIcons.bx_user,
+                color: AppColors.black600,
+              ),
+              selectedIcon: Icon(
+                BoxIcons.bxs_user,
+                color: context.colors.primary,
+              ),
+              label: AppStrings.profile,
             ),
-            label: AppStrings.profile,
-          ),
-        ],
-      ).box.shadowSm.make(),
+          ],
+        ).box.shadowSm.make(),
+      ),
     );
   }
+}
+
+void showBackDialog(BuildContext context, void Function(bool) onPopInvoked) {
+  showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text(
+          'Are you sure you want to Quit?',
+        ),
+        actions: <Widget>[
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('No'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            child: const Text('Yes'),
+            onPressed: () {
+              Navigator.pop(context);
+              // SystemNavigator.pop();
+              onPopInvoked(true);
+            },
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easylogger/flutter_logger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -39,7 +38,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       observers: [
         BotToastNavigatorObserver(),
       ]);
-});
+}, name: "routerProvider");
 
 class RouterNotifier extends Listenable {
   final Ref _ref;
@@ -51,13 +50,17 @@ class RouterNotifier extends Listenable {
     final user = _ref.watch(loggedInProvider.notifier).user;
 
     final isLoggedIn = _ref.watch(loggedInProvider).loggedIn; //bool
+
     // final isOnboarding = _ref.watch(loggedInProvider).onboarding; //bool
 
-    Logger.i('RouterNotifier: isLoggedIn - $isLoggedIn');
+    log('RouterNotifier: isLoggedIn - $isLoggedIn');
     log('RouterNotifier:  $token, $user');
+    log('matchedLocation:  ${state.matchedLocation}');
 
     final areWeLoggingIn = state.matchedLocation == LoginScreen.route;
     final areWeRegistering = state.matchedLocation == RegisterScreen.route;
+    log('areWeLoggingIn:  $areWeLoggingIn');
+    log('areWeRegistering:  $areWeRegistering');
 
     if (!isLoggedIn && areWeLoggingIn) {
       return areWeLoggingIn ? null : LoginScreen.route;
