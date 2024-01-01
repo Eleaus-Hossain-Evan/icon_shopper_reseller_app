@@ -18,8 +18,8 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //. -- Refresh Controller --
-    final refreshController = useMemoized(
-        () => RefreshController(initialLoadStatus: LoadStatus.canLoading));
+    final refreshController = useMemoized(() => RefreshController(
+        initialLoadStatus: LoadStatus.canLoading, initialRefresh: true));
 
     return Scaffold(
       appBar: KAppBar(

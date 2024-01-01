@@ -32,7 +32,8 @@ class ProductVariationSection extends HookConsumerWidget {
         crossAxisAlignment: crossStart,
         children: [
           Visibility(
-            visible: state.stockProducts.first.total <= 0,
+            visible: state.stockProducts.isNotEmpty &&
+                state.stockProducts.first.total <= 0,
             replacement: Column(
               crossAxisAlignment: crossStart,
               children: [
@@ -59,7 +60,49 @@ class ProductVariationSection extends HookConsumerWidget {
                   .make(),
             ),
           ),
-          gap24,
+          gap16,
+          // Visibility(
+          //   visible: ref.watch(productVariantProvider).qty <= 0,
+          //   child: Center(
+          //     child: "This Variation Out of Stock"
+          //         .text
+          //         .lg
+          //         .color(AppColors.error)
+          //         .bold
+          //         .make()
+          //         .pSymmetric(h: 8, v: 4)
+          //         .box
+          //         .color(AppColors.error.withOpacity(.2))
+          //         .make(),
+          //   ),
+          // ),
+          AnimatedSize(
+            duration: 300.milliseconds,
+            reverseDuration: 300.milliseconds,
+            child: AnimatedSwitcher(
+              // firstChild: const SizedBox.shrink(),
+              // crossFadeState: ref.watch(productVariantProvider).qty <= 0
+              //     ? CrossFadeState.showSecond
+              //     : CrossFadeState.showFirst,
+              // firstChild: const SizedBox.shrink(),
+              duration: 300.milliseconds,
+              child: (state.stockProducts.isNotEmpty &&
+                          state.stockProducts.first.total > 0) &&
+                      ref.watch(productVariantProvider).qty <= 0
+                  ? "This Variation Out of Stock"
+                      .text
+                      .lg
+                      .color(AppColors.error)
+                      .bold
+                      .make()
+                      .pSymmetric(h: 8, v: 4)
+                      .box
+                      .color(AppColors.error.withOpacity(.2))
+                      .make()
+                  : const SizedBox.shrink(),
+            ),
+          ),
+          gap12,
           "Product color may slightly vary, depending on your devices screen resolution"
               .text
               .center
@@ -108,6 +151,8 @@ class ProductVariationSection extends HookConsumerWidget {
     );
   }
 }
+
+mixin currentContext {}
 
 class ProductVariantList extends HookConsumerWidget {
   const ProductVariantList({

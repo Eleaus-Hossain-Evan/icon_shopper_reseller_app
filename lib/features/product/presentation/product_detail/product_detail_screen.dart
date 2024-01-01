@@ -11,7 +11,6 @@ import '../../../../core/core.dart';
 import '../../../../features/checkout/presentation/cart_screen.dart';
 import '../../../../features/product/application/product_provider.dart';
 import '../../../../features/product/presentation/product_detail/widgets/product_variation_section.dart';
-import '../../../../features/product/presentation/product_detail/widgets/similar_product_section.dart';
 import '../../../common/presentation/go_to_cart_button.dart';
 import '../../../profile/presentation/widgets/contact_info_widget.dart';
 import 'widgets/product_cart_section.dart';
@@ -101,7 +100,7 @@ class ProductDetailScreen extends HookConsumerWidget {
 
             SliverGap(6.h),
 
-            const SimilarProductSection().toSliverBox(),
+            // const SimilarProductSection().toSliverBox(),
 
             SliverGap(6.h),
 
