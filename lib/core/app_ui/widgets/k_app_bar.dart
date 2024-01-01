@@ -18,6 +18,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.elevation,
     this.foregroundColor = AppColors.black,
+    this.surfaceTintColor,
   }) : super(key: key);
 
   final Widget? leading;
@@ -28,7 +29,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextStyle? titleTextStyle;
   final bool centerTitle;
   final PreferredSizeWidget? bottom;
-  final Color? backgroundColor, foregroundColor;
+  final Color? backgroundColor, foregroundColor, surfaceTintColor;
   final double? elevation;
 
   @override
@@ -50,6 +51,7 @@ class KAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       bottom: bottom,
       elevation: elevation,
+      surfaceTintColor: surfaceTintColor,
     );
   }
 

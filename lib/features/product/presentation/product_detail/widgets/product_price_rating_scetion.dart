@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_easylogger/flutter_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:icon_shopper_reseller_app/features/auth/application/auth_provider.dart';
@@ -20,8 +19,6 @@ class ProductPriceRatingSection extends HookConsumerWidget {
     // return const SizedBox.shrink();
 
     final sellerTotalDiscount = ref.watch(authProvider).user.special_discount;
-
-    Logger.d('percent: $sellerTotalDiscount');
 
     final hasVariation =
         state.productVariationStatus == 1; //' product has variation or not
