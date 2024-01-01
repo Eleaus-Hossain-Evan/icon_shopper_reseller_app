@@ -8,15 +8,15 @@ import '../../../core/core.dart';
 import '../../common/presentation/product_list_tile.dart';
 import '../application/product_provider.dart';
 
-class CategoryWiseProductScreen extends HookConsumerWidget {
-  static const route = '/category-wise-product';
+class ProductListScreen extends HookConsumerWidget {
+  static const route = '/product-list';
 
-  const CategoryWiseProductScreen({
+  const ProductListScreen({
     super.key,
     required this.slug,
   });
 
-  final String slug;
+  final String? slug;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     bool noDataMessageDisplayed =
@@ -24,7 +24,7 @@ class CategoryWiseProductScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: KAppBar(
-        titleText: slug,
+        titleText: slug ?? "All Products",
       ),
       body: ListView.custom(
         padding: padding16,
@@ -34,8 +34,10 @@ class CategoryWiseProductScreen extends HookConsumerWidget {
 
             final page = index ~/ pageSize + 1;
             final indexInPage = index % pageSize;
-            final packageList =
-                ref.watch(categoryWiseProductProvider(slug: slug, page: page));
+            final packageList = slug.isNotEmptyAndNotNull
+                ? ref.watch(
+                    categoryWiseProductProvider(slug: slug ?? "", page: page))
+                : ref.watch(allProductProvider(page: page));
 
             if (packageList.when(
               data: (data) => data.isNotEmpty,

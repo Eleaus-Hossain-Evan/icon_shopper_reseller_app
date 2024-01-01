@@ -36,6 +36,18 @@ Future<List<ProductModel>> categoryWiseProduct(
   );
 }
 
+@riverpod
+FutureOr<List> allProduct(AllProductRef ref, {int page = 1}) async {
+  final data = await ProductRepo().getAllProduct(page: page);
+  return data.fold(
+    (l) {
+      showErrorToast(l.error.message);
+      return [];
+    },
+    (r) => r.new_arrival.data,
+  );
+}
+
 final slugProvider = StateProvider<String>((ref) {
   return '';
 });

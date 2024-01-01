@@ -8,7 +8,7 @@ import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../core/core.dart';
 import '../../../../features/home/application/home_provider.dart';
-import '../../../../features/product/presentation/category_wise_product.dart';
+import '../../../product/presentation/product_list_screen.dart';
 
 class HomeCategoryWidget extends HookConsumerWidget {
   const HomeCategoryWidget({super.key});
@@ -36,7 +36,7 @@ class HomeCategoryWidget extends HookConsumerWidget {
             return KInkWell(
               onTap: () {
                 log("message");
-                context.push("${CategoryWiseProductScreen.route}/${item.slug}");
+                context.push("${ProductListScreen.route}?slug=${item.slug}");
               },
               child: Stack(
                 children: [

@@ -13,8 +13,8 @@ import '../../features/checkout/presentation/order_success_screen.dart';
 import '../../features/common/presentation/html_text_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/main_mav/main_nav.dart';
-import '../../features/product/presentation/category_wise_product.dart';
 import '../../features/product/presentation/product_detail/product_detail_screen.dart';
+import '../../features/product/presentation/product_list_screen.dart';
 import '../../features/profile/domain/model/order_model.dart';
 import '../../features/profile/presentation/change_password_screen.dart';
 import '../../features/profile/presentation/page/order_detail_screen.dart';
@@ -135,11 +135,11 @@ class RouterNotifier extends Listenable {
           ),
         ),
         GoRoute(
-          path: '${CategoryWiseProductScreen.route}/:slug',
+          path: ProductListScreen.route,
           pageBuilder: (context, state) => SlideRightToLeftTransitionPage(
             key: state.pageKey,
-            child: CategoryWiseProductScreen(
-              slug: state.pathParameters['slug'] ?? '',
+            child: ProductListScreen(
+              slug: state.uri.queryParameters['slug'],
             ),
           ),
         ),

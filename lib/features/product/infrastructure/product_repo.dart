@@ -12,6 +12,7 @@ import '../../../features/product/domain/category_wise_product_list.dart';
 import '../../../features/product/domain/model/product_stock_model.dart';
 import '../../../features/product/domain/product_response.dart';
 import '../../../features/product/domain/similar_product_response.dart';
+import '../domain/get_all_product_list.dart';
 
 final productRepoProvider = Provider<ProductRepo>((ref) {
   return ProductRepo();
@@ -28,6 +29,18 @@ class ProductRepo {
     final data = await api.get(
       fromData: (json) => CategoryWiseProductResponse.fromMap(json),
       endPoint: "${APIRouteEndpoint.CATEGORY_WISE_PRODUCT}$slug?page=$page",
+      withToken: true,
+    );
+
+    return data;
+  }
+
+  Future<Either<CleanFailure, GetAllProductResponse>> getAllProduct({
+    required int page,
+  }) async {
+    final data = await api.get(
+      fromData: (json) => GetAllProductResponse.fromMap(json),
+      endPoint: "${APIRouteEndpoint.GET_ALL_PRODUCT}?page=$page",
       withToken: true,
     );
 

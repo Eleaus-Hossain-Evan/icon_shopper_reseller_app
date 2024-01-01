@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:icon_shopper_reseller_app/features/product/presentation/product_list_screen.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../core/app_ui/app_ui.dart';
@@ -104,13 +106,18 @@ class HomeLatestProductWidget extends HookConsumerWidget {
         //         },
         //       ),
         gap20,
-        "View All Product"
-            .text
-            .xl2
-            .semiBold
-            .underline
-            .letterSpacing(.8)
-            .makeCentered(),
+        KInkWell(
+            onTap: () {
+              context.push(ProductListScreen.route);
+            },
+            padding: (12, 6).padding,
+            child: "View All Product"
+                .text
+                .xl2
+                .semiBold
+                .underline
+                .letterSpacing(.8)
+                .make()),
         Gap(45.h),
       ],
     ).color(AppColors.bg200);
