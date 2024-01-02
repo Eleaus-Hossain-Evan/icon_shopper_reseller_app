@@ -20,7 +20,7 @@ class ProductCartSection extends HookConsumerWidget {
 
     final isAvailable = useMemoized<bool>(() {
       return (state.stockProducts.isNotEmpty &&
-              state.stockProducts.first.total <= 0) &&
+              state.stockProducts.first.total <= 0) ||
           variant.qty <= 0;
     }, [state.stockProducts, variant.qty]);
 
