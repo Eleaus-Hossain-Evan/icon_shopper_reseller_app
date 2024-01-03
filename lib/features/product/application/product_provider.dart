@@ -17,6 +17,7 @@ final productTitleOverflow = StateProvider<bool>((ref) {
   return false;
 }, name: 'productTitleOverflow');
 
+//' Category wise product by Slug
 @riverpod
 Future<List<ProductModel>> categoryWiseProduct(
   CategoryWiseProductRef ref, {
@@ -36,6 +37,7 @@ Future<List<ProductModel>> categoryWiseProduct(
   );
 }
 
+//' All product
 @riverpod
 FutureOr<List> allProduct(AllProductRef ref, {int page = 1}) async {
   final data = await ProductRepo().getAllProduct(page: page);
@@ -48,10 +50,12 @@ FutureOr<List> allProduct(AllProductRef ref, {int page = 1}) async {
   );
 }
 
+//' Product's slug
 final slugProvider = StateProvider<String>((ref) {
   return '';
-});
+}, name: 'slugProvider');
 
+//' Product's details
 final getProductDetailsProvider = FutureProvider<ProductResponse>((ref) async {
   final slug = ref.watch(slugProvider);
   final result = await ProductRepo().getProductDetails(slug);
@@ -61,6 +65,7 @@ final getProductDetailsProvider = FutureProvider<ProductResponse>((ref) async {
   }, (r) => r);
 }, name: 'getProductDetailsProvider');
 
+//' Product's selected variant
 final productVariantProvider =
     StateProvider.autoDispose<ProductVariantModel>((ref) {
   final state = ref.watch(productNotifierProvider);
@@ -94,6 +99,7 @@ class ProductNotifier extends _$ProductNotifier {
   }
 }
 
+//' Similar Products of a product
 final similarProductProvider =
     FutureProvider.autoDispose<List<ProductModel>>((ref) async {
   final state = ref.watch(productNotifierProvider);
@@ -107,6 +113,7 @@ final similarProductProvider =
   }, (r) => r.data);
 }, name: 'similarProductProvider');
 
+//' Product's stock
 @riverpod
 class ProductStock extends _$ProductStock {
   @override

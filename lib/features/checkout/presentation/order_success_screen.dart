@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../core/core.dart';
+import '../../main_mav/main_nav.dart';
 
 class OrderSuccessScreen extends HookConsumerWidget {
   static const route = '/order-success';
@@ -98,6 +99,8 @@ class OrderSuccessScreen extends HookConsumerWidget {
             KFilledButton(
               onPressed: () {
                 context.pop();
+                (MainNav.bottomNavigatorKey.currentWidget as NavigationBar)
+                    .onDestinationSelected!(0);
               },
               text: 'Return to Home',
             ).px32()

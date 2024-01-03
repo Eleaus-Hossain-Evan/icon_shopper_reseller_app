@@ -44,10 +44,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300),
+        () => ref.read(loggedInProvider.notifier).deleteAuthCache());
+
     showToast('${state.user.name} logging out');
 
-    ref.read(loggedInProvider.notifier).deleteAuthCache();
+    // ref.read(loggedInProvider.notifier).deleteAuthCache();
     // ref.read(routerProvider).go(LoginScreen.route);
 
     // ref.read(loggedInProvider.notifier).isLoggedIn();

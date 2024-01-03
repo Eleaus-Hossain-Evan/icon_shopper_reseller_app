@@ -202,7 +202,6 @@ class Checkout extends _$Checkout {
         return (false, '');
       },
       (r) {
-        ref.read(routerProvider).pop();
         ref.read(cartProductProvider.notifier).clearCart();
         state = const AsyncData(null);
         showToast(r.message);
