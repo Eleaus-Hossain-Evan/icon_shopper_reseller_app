@@ -15,12 +15,10 @@ class CartProductTile extends HookConsumerWidget {
     super.key,
     required this.cartProduct,
     this.isCart = true,
-    this.fromProductDetail = false,
   });
 
   final CartProductModel cartProduct;
   final bool isCart;
-  final bool fromProductDetail;
 
   @override
   Widget build(BuildContext context, ref) {
@@ -57,7 +55,7 @@ class CartProductTile extends HookConsumerWidget {
       //   ],
       // ),
       child: KInkWell(
-        onTap: fromProductDetail || !isCart
+        onTap: !isCart
             ? null
             : () => context.push(
                   "${ProductDetailScreen.route}/${cartProduct.product.id}",

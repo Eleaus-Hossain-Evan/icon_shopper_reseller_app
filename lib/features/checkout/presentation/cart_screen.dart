@@ -17,10 +17,8 @@ class CartScreen extends HookConsumerWidget {
 
   const CartScreen({
     super.key,
-    this.fromProductDetail = false,
   });
 
-  final bool fromProductDetail;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(cartProductProvider);
@@ -68,10 +66,7 @@ class CartScreen extends HookConsumerWidget {
                     padding: paddingH16,
                     separatorBuilder: (context, index) => gap8,
                     itemBuilder: (context, index) {
-                      return CartProductTile(
-                        cartProduct: state[index],
-                        fromProductDetail: fromProductDetail,
-                      );
+                      return CartProductTile(cartProduct: state[index]);
                       // return Container(
                       //   height: 100.h,
                       //   color: Colors.red,
@@ -112,33 +107,30 @@ class CartScreen extends HookConsumerWidget {
             ),
           ).box.white.shadowSm.roundedSM.make().px24(),
           gap10,
-          Visibility(
-            visible: !fromProductDetail,
-            child: Padding(
-              padding: paddingH20,
-              child: KFilledButton(
-                borderRadius: BorderRadius.circular(20.r),
-                onPressed: state.isEmpty
-                    ? null
-                    : () {
-                        // if (ref.watch(loggedInProvider).loggedIn) {
-                        context.push(CheckoutScreen.route);
-                        // } else {
-                        //   context.pushNamed(SignInScreen.route);
-                        // }
-                        // context.pushNamed(CheckoutScreen.route);
-                      },
-                child: Row(
-                  mainAxisAlignment: mainCenter,
-                  children: [
-                    AppStrings.checkout.text.base.wide.make(),
-                    gap4,
-                    Icon(
-                      Bootstrap.box_arrow_in_right,
-                      size: 18.sp,
-                    ),
-                  ],
-                ),
+          Padding(
+            padding: paddingH20,
+            child: KFilledButton(
+              borderRadius: BorderRadius.circular(20.r),
+              onPressed: state.isEmpty
+                  ? null
+                  : () {
+                      // if (ref.watch(loggedInProvider).loggedIn) {
+                      context.push(CheckoutScreen.route);
+                      // } else {
+                      //   context.pushNamed(SignInScreen.route);
+                      // }
+                      // context.pushNamed(CheckoutScreen.route);
+                    },
+              child: Row(
+                mainAxisAlignment: mainCenter,
+                children: [
+                  AppStrings.checkout.text.base.wide.make(),
+                  gap4,
+                  Icon(
+                    Bootstrap.box_arrow_in_right,
+                    size: 18.sp,
+                  ),
+                ],
               ),
             ),
           ),
